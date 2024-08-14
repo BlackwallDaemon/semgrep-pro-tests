@@ -18,15 +18,13 @@ jobs:
       run: |
         python3 -m pip install semgrep
 
-    - name: Log in to Semgrep Pro
+    - name: Set up Semgrep Authentication
       env:
         SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
       run: |
-        echo "$SEMGREP_APP_TOKEN" | semgrep login --token-from-stdin
+        echo "export SEMGREP_APP_TOKEN=${{ secrets.SEMGREP_APP_TOKEN }}" >> $GITHUB_ENV
 
     - name: Install Semgrep Pro Components
-      env:
-        SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
       run: |
         semgrep install-semgrep-pro
 
@@ -35,7 +33,5 @@ jobs:
         semgrep --version
 
     - name: Run Semgrep Pro Scan
-      env:
-        SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
       run: |
         semgrep --pro --config=pro.yaml .
