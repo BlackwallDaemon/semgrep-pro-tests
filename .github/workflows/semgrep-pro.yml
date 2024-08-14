@@ -38,4 +38,4 @@ jobs:
       env:
         SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
       run: |
-        semgrep ci --config=docs/class_inheritance/pro.yaml --pro
+        semgrep ci --pro
