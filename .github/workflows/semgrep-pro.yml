@@ -1,4 +1,4 @@
-name: Run Semgrep Pro
+name: Setup and Run Semgrep Pro
 
 on:
   push:
@@ -7,17 +7,31 @@ on:
   workflow_dispatch: # Allows manual triggering of the workflow from the Actions tab
 
 jobs:
-  run-semgrep:
-    runs-on: ubuntu-latest
+  setup-and-scan:
+    runs-on: ubuntu-latest # You can use macOS-latest or windows-latest if needed.
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Install Semgrep
+    - name: Install Semgrep via pip
       run: |
-        pip install semgrep
+        python3 -m pip install semgrep
 
-    - name: Run Semgrep Pro
+    - name: Authenticate with Semgrep Pro
+      env:
+        SEMGREP_API_TOKEN: ${{ secrets.SEMGREP_API_TOKEN }}
+      run: |
+        semgrep login --token $SEMGREP_API_TOKEN
+
+    - name: Install Semgrep Pro Components
+      run: |
+        semgrep install-semgrep-pro
+
+    - name: Confirm Semgrep Installation
+      run: |
+        semgrep --version
+
+    - name: Run Semgrep Pro Scan
       run: |
         semgrep --pro --config=pro.yaml .
