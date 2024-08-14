@@ -1,0 +1,23 @@
+name: Run Semgrep Pro
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Allows manual triggering of the workflow from the Actions tab
+
+jobs:
+  run-semgrep:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install Semgrep
+      run: |
+        pip install semgrep
+
+    - name: Run Semgrep Pro
+      run: |
+        semgrep --pro --config=pro.yaml .
